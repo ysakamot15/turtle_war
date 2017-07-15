@@ -7,7 +7,9 @@ from kobuki_msgs.msg import BumperEvent
 from gazebo_msgs.msg import ModelStates 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
+import numpy as np
 import cv2
+from matplotlib import pyplot as plt
 
 
 class AbstractBot(object):
@@ -62,10 +64,29 @@ class AbstractBot(object):
     def imageCallback(self, data):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            
+            # RGB表色系からHSV表色系に変換                                                    
+            hsv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+            color = ('b','g','r')
+            for i,col in enumerate(color):
+                histr = cv2.calcHist([cv_image],[i],None,[256],[0,256])
+            #plt.plot(histr,color = col)
+            #plt.xlim([0,256])
+            #plt.show()
+           # color_min = np.array([150,100,150])
+           # color_max = np.array([180,255,255])
+            # マスク画像を生成                                                               
+           # color_mask = cv2.inRange(hsv_image, color_min, color_max);
+            # 画像配列のビット毎の倫理席。マスク画像だけが抽出される。                          
+           # cv_image2  = cv2.bitwise_and(cv_image, cv_image, mask = color_mask)    
+            
+            
+
         except CvBridgeError as e:
             print(e)
 
-        cv2.imshow("Image window", cv_image)
+        #cv2.imshow("Image window", cv_image)
+        #cv2.imshow("Image window2", cv_image2)
         cv2.waitKey(3)
 
     @abstractmethod

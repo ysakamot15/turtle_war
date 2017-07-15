@@ -49,7 +49,7 @@ class RandomBot(AbstractBot):
                     x = 0
                     y = 0
                     count += 1
-                    if count >= 30:
+                    if (self.red_score >= 200000 & self.green_score < 100000 & blue_score < 100000) or count >= 90:
                         print "ToLine"
                         count = 0
                         state = STATE_LINE
